@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,19 +20,24 @@ import { ToastModule } from 'primeng/toast';
     PasswordModule,
   ],
   providers: [MessageService],
-  templateUrl: './componentes.component.html',
-  styleUrl: './componentes.component.css'
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
 })
-export class ComponentesComponent {
+export class LoginComponent {
   login: string = "";
   senha : string = "";
 
-  constructor(private messageService: MessageService) {}
+  constructor
+  ( // Necessario para poder apresentar mensagem de feedback para o usuario
+    private messageService: MessageService,
+    // Necessario para poder redirecionar para outra rota
+    private router: Router,
+    ) {}
 
 
   enviar() {
     if (this.login == "admin" && this.senha == "batatinha") {
-
+      this.router.navigate(["/home"])
     } else {
       this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Login e/ou senha inválidos' });
     }
