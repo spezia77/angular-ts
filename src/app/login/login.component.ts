@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
@@ -18,6 +19,7 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     RippleModule,
     PasswordModule,
+    PanelModule
   ],
   providers: [MessageService],
   templateUrl: './login.component.html',
@@ -41,6 +43,10 @@ export class LoginComponent {
     } else {
       this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Login e/ou senha inválidos' });
     }
-
+    
+  }
+  
+  redirecionarCadastrar(){
+    this.router.navigate(["/cadastrar"])
   }
 }
