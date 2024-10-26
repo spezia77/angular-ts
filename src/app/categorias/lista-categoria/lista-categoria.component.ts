@@ -1,29 +1,27 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { NavbarComponent } from "../../navbar/navbar.component";
 
-
-
-interface Categoria {
+interface Categoria{
   id: number,
-  nome: String
+  nome: string
 }
-
 
 @Component({
   selector: 'app-lista-categoria',
   standalone: true,
-  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, FormsModule],
+  imports: [TableModule, ButtonModule, DialogModule, InputTextModule, FormsModule, NavbarComponent],
   templateUrl: './lista-categoria.component.html',
   styleUrl: './lista-categoria.component.css'
 })
 export class ListaCategoriaComponent {
   nome: string = "";
-  categorias!:Categoria[];
-  modalApresentada: boolean = false;
+  categorias!: Categoria[];
+  modalApresentada: boolean = false; 
 
   ngOnInit(){
     this.categorias = [
@@ -33,10 +31,8 @@ export class ListaCategoriaComponent {
       }
     ]
   }
-  
+
   abrirModal(){
     this.modalApresentada = true;
   }
-
-
 }

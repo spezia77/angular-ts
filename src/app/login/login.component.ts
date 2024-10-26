@@ -6,20 +6,18 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
-import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-  selector: 'app-componentes',
+  selector: 'app-login',
   standalone: true,
   imports: [
     InputTextModule,
     FormsModule,
     ButtonModule,
     ToastModule,
-    RippleModule,
     PasswordModule,
-    PanelModule
+    PanelModule,
   ],
   providers: [MessageService],
   templateUrl: './login.component.html',
@@ -27,26 +25,31 @@ import { ToastModule } from 'primeng/toast';
 })
 export class LoginComponent {
   login: string = "";
-  senha : string = "";
+  senha: string = "";
 
-  constructor
-  ( // Necessario para poder apresentar mensagem de feedback para o usuario
+  constructor(
+    // Necessário para poder apresentar mensagem de feeback para o usuário
     private messageService: MessageService,
-    // Necessario para poder redirecionar para outra rota
+    // Necessário para poder redirecionar para outra rota
     private router: Router,
-    ) {}
-
+  ) { }
 
   enviar() {
+    // Verificar se o login e senha estão corretos
     if (this.login == "admin" && this.senha == "batatinha") {
-      this.router.navigate(["/home"])
-    } else {
-      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Login e/ou senha inválidos' });
+      // Redirecionar para a tela da home
+      this.router.navigate(["/home"]) 
+    } else if (this.login == "gamer" && this.senha == "batatinha") {
+      this.router.navigate(["/grid"])
     }
-    
+    else {
+      // Apresentar mensagem que o login/senha estão inválidos
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Login e/ou Senha inválidas' });
+    }
   }
-  
+
   redirecionarCadastrar(){
     this.router.navigate(["/cadastrar"])
   }
 }
+ 

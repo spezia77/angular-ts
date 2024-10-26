@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; 
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
@@ -14,25 +14,28 @@ import { MenubarModule } from 'primeng/menubar';
 export class NavbarComponent {
   items: MenuItem[] | undefined;
 
-  constructor(private router: Router) {}
+    constructor(private router: Router) {}
 
-  ngOnInit() {
-      this.items = [
-          {
-              label: 'Jogos',
-              icon: 'pi pi-discord',
-              items: [
-                  {
-                      label: 'Categorias',
-                      route: '/categorias'
-                  },
-                  {
-                      label: 'Jogos',
-                      route: '/jogos'
-                  }
-              ]
-          },
-      ];
-  }
+    ngOnInit() {
+        this.items = [
+            {
+                label: 'Menu',
+                icon: 'pi pi-discord',
+                items: [
+                    {
+                        label : 'Home',
+                        route: '/home'
+                    },
+                    {
+                        label: 'Categorias',
+                        route: '/categorias'
+                    },
+                    {
+                        label: 'Jogos',
+                        route: '/jogos'
+                    }
+                ]
+            },
+        ];
+    }
 }
-

@@ -1,11 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
+
+interface Endereco{
+  uf: string,
+  localidade: string,
+  bairro: string,
+  logradouro: string
+}
 
 @Component({
   selector: 'app-cadastro-usuario',
@@ -17,7 +26,9 @@ import { PasswordModule } from 'primeng/password';
     CalendarModule,
     InputMaskModule,
     PanelModule,
+    ToastModule,
   ],
+  providers: [MessageService],
   templateUrl: './cadastro-usuario.component.html',
   styleUrl: './cadastro-usuario.component.css'
 })
@@ -33,21 +44,27 @@ export class CadastroUsuarioComponent {
   bairro: string = "";
   logradouro: string = "";
 
+  constructor(private httpClient: HttpClient, private messageService: MessageService){
+  }
 
-constructor(private httpClient: HttpClient){
-}
+  buscarEndereco(){
+    let cep = this.cep.replace("-", "").replace("_", "").replace(".", "")
 
-buscarEndereco(){
-  let cep = this.cep.replace("-","").replace(".", "")
-this.httpClient.get(`https://viacep.com.br/ws/${cep}/json/`, {observe: "response"})
-  .subscribe(res => {
-    console.log(res);
-  })
-}
-
-
+    if (cep.length != 8){
+      this.messageService.clear();
+      this.messageService.add({summary: "CEP inválido", severity: "error"})
+      return;
+    }
+    this.httpClient.get<Endereco>(`https://viacep.com.br/ws/${cep}/json/`)
+      .subscribe(res => {
+        this.estado = res.uf;
+        this.cidade = res.localidade;
+        this.logradouro = res.logradouro;
+        this.bairro = res.bairro;
+      })
+  }
 
   cadastrar(){
-this.buscarEndereco()
+    this.buscarEndereco();
   }
 }
