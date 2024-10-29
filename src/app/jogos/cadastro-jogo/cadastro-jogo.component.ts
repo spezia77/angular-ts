@@ -15,15 +15,12 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { PanelModule } from 'primeng/panel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CommonModule } from '@angular/common';
-
-interface Desenvolvedora {
-  nome: string
-}
-
-interface Categoria {
-  nome: string,
-  id: number
-}
+import { Desenvolvedora } from '../../models/desenvolvedora';
+import { Categoria } from '../../models/categorias';
+import { PlataformaService } from '../../services/plataforma.service';
+import { Plataforma } from '../../models/plataforma';
+import { CategoriaService } from '../../services/categoria.service';
+import { DesenvolvedorasService } from '../../services/desenvolvedoras.service';
 
 @Component({
   selector: 'app-cadastro-jogo',
@@ -64,35 +61,49 @@ export class CadastroJogoComponent {
 
   desenvolvedoras!: Desenvolvedora[];
   categorias!: Categoria[];
-  plataformas!: string[];
+  plataformas!: Plataforma[];
+
+  constructor(
+    private plataformaService: PlataformaService,
+    private categoriaService: CategoriaService,
+    private desenvolvedoraService: DesenvolvedorasService,
+    ){
+
+  }
 
   ngOnInit() {
-    this.desenvolvedoras = [
-      { nome: "Naughty Dog" },
-      { nome: "Insomniac Games" },
-      { nome: "CD Projekt Red" },
-      { nome: "Square Enix" },
-      { nome: "Ubisoft" },
-      { nome: "Epic Games" },
-      { nome: "Valve" },
-      { nome: "FromSoftware" },
-      { nome: "Bungie" },
-      { nome: "Rockstar Games" }
-    ];
+    this.carregarCategorias();
+    this.carregarDesenvolvedoras();
+    this.carregarPlataformas();
+  }
 
-    this.categorias = [
-      { nome: "Ação", id: 1 },
-      { nome: "Aventura", id: 2 },
-      { nome: "RPG", id: 3 },
-      { nome: "Estratégia", id: 4 },
-      { nome: "Simulação", id: 5 },
-      { nome: "Esporte", id: 6 },
-      { nome: "Tiro em Primeira Pessoa", id: 7 },
-      { nome: "Plataforma", id: 8 },
-      { nome: "Horror", id: 9 },
-      { nome: "Multiplayer Online", id: 10 }
-    ];
+  carregarPlataformas() {
+    this.plataformaService.obterTodas().subscribe({
+      next: plataformas => this.plataformas = plataformas,
+      error: erro => {
+        alert("Ocorreu um erro ao carregar as plataformas")
+        console.error(erro)
+      }
+    })
+  }
 
-    this.plataformas = ["Mobile", "Nintendo", "PC", "PlayStation", "Xbox"]
+  carregarDesenvolvedoras() {
+    this.desenvolvedoraService.obterTodas().subscribe({
+      next: desenvolvedoras => this.desenvolvedoras = desenvolvedoras,
+      error: erro => {
+        alert("Ocorreu um erro ao carregar as desenvolvedoras")
+        console.error(erro)
+      }
+    })
+  }
+
+  carregarCategorias() {
+    this.categoriaService.obterTodas().subscribe({
+      next: categorias => this.categorias = categorias,
+      error: erro => {
+        alert("Ocorreu um erro ao carregar as categorias")
+        console.error(erro)
+      }
+    })
   }
 }
