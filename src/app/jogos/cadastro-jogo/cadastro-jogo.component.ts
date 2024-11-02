@@ -5,7 +5,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
 import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
+import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -21,6 +21,10 @@ import { PlataformaService } from '../../services/plataforma.service';
 import { Plataforma } from '../../models/plataforma';
 import { CategoriaService } from '../../services/categoria.service';
 import { DesenvolvedorasService } from '../../services/desenvolvedoras.service';
+import { JogoForm } from '../../models/jogo-form';
+import { Router } from '@angular/router';
+import { JogoService } from '../../services/jogo.service';
+
 
 @Component({
   selector: 'app-cadastro-jogo',
@@ -47,17 +51,7 @@ import { DesenvolvedorasService } from '../../services/desenvolvedoras.service';
   styleUrl: './cadastro-jogo.component.css'
 })
 export class CadastroJogoComponent {
-  nome: string = "";
-  preco!: number;
-  desenvolvedora: string = "";
-  dataLancamento!: Date;
-  classificacao: number = 0;
-  tags!: string[];
-  categoria: string = "";
-  imagem: string = "";
-  descricao: string = "";
-  plataforma!: string[];
-  disponivelVenda: boolean = false;
+  jogoForm: JogoForm;
 
   desenvolvedoras!: Desenvolvedora[];
   categorias!: Categoria[];
@@ -67,8 +61,17 @@ export class CadastroJogoComponent {
     private plataformaService: PlataformaService,
     private categoriaService: CategoriaService,
     private desenvolvedoraService: DesenvolvedorasService,
-    ){
-
+    private router: Router,
+    private jogoService:JogoService,
+  ) {
+    this.jogoForm = {
+      nome: "",
+      desenvolvedora: "",
+      classificacao: 0,
+      tags: [],
+      plataforma: [],
+      disponivelVenda: false
+    };
   }
 
   ngOnInit() {
@@ -105,5 +108,20 @@ export class CadastroJogoComponent {
         console.error(erro)
       }
     })
+  }
+  salvar() {
+    this.jogoService.cadastrar(this.jogoForm).subscribe({
+      next: response => {
+        this.router.navigate(["/jogos"])
+      },
+      error: erro => {
+        console.error(erro);
+        alert("Ocorreu um erro inesperado");
+      }
+    })
+  }
+
+  armazenarFoto(event: FileUploadEvent){
+    this.jogoForm.imagem = event.files[0];
   }
 }

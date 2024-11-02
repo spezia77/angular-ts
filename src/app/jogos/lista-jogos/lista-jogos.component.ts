@@ -4,15 +4,8 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ImageModule } from 'primeng/image';
 import { Router } from '@angular/router';
-
-interface JogoLista{
-  id: number,
-  foto: string,
-  nome: string,
-  preco: number,
-  categoria: string,
-}
-
+import { JogoService } from '../../services/jogo.service';
+import { JogoLista } from '../../models/jogo-lista';
 
 @Component({
   selector: 'app-lista-jogos',
@@ -29,21 +22,19 @@ interface JogoLista{
 export class ListaJogosComponent {
   jogos!: JogoLista[];
 
-  constructor(private router: Router){}
+  constructor(private router: Router, private jogoService: JogoService) { }
 
-  ngOnInit(){
-    this.jogos = [
-      {
-        id: 1,
-        nome: "The Last of US 2",
-        foto: "https://upload.wikimedia.org/wikipedia/pt/9/96/The_Last_of_Us_2_capa.png",
-        preco: 250.00,
-        categoria: "Survivor"
+  ngOnInit() {
+    this.jogoService.obterParaLista().subscribe({
+      next: jogos => this.jogos = jogos,
+      error: erro => {
+        console.error(erro);
+        alert("Não foi possível ca1rregar a lista de jogos")
       }
-    ]
+    })
   }
 
-  acessarCadastro(){
+  acessarCadastro() {
     this.router.navigate(["/jogos/cadastro"])
   }
 }
